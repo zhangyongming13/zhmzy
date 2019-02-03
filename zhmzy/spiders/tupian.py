@@ -4,14 +4,14 @@ import random
 from zhmzy.items import ZhmzyItem
 
 
-url = ['your_url']
+url = ['https://www.273zh.com/html/news/69/']
 
 
 class Zhmzy_tupian(scrapy.Spider):
     name = 'zhmzy'
-    allowed_url = ['your_url.com']
-    start_urls = ['your_url']
-    url_init = 'your_url'
+    allowed_url = ['273zh.com']
+    start_urls = ['https://www.273zh.com/html/news/69/']
+    url_init = 'https://www.273zh.com'
 
     def parse(self,response):
         try:
