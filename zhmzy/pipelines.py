@@ -46,6 +46,7 @@ class ZhmzyPipeline(object):
         data_mongodb = dict(item)  # 写入数据到mongodb数据库
         self.post.insert(data_mongodb)
 
+        # 进行图片的获取还有写入本地磁盘
         dir_name = item['tiezi_name']
         if not os.path.exists(dir_name):  # 创建每个帖子对应的图片存放文件夹
             os.mkdir(dir_name)

@@ -4,22 +4,24 @@ import random
 from zhmzy.items import ZhmzyItem
 
 
-url = ['https://www.584zh.com/html/news/69/2.html']
+url = ['your_url']
 
 
 class Zhmzy_tupian(scrapy.Spider):
-    name = 'Zhmzy'
-    allowed_url = ['584zh.com']
-    start_urls = ['https://www.584zh.com/html/news/69/2.html']
-    url_init = 'https://www.584zh.com'
+    name = 'zhmzy'
+    allowed_url = ['your_url.com']
+    start_urls = ['your_url']
+    url_init = 'your_url'
 
     def parse(self,response):
         try:
             data = response.xpath("//a[@class='video-pic loading']")
-            for each in data:
+            for each in data:  # 获取整个页面存在的帖子的名字对象的链接
                 item = ZhmzyItem()
                 item['tiezi_name'] = each.xpath("./span[@class='note text-bg-c']/text()").extract()[0]
                 item['tiezi_link'] = self.url_init + each.xpath("./@href").extract()[0]
+                # 获取每一个链接帖子的具体情况，相当于点进去然后获取每个图片的链接
+                time.sleep(8 + random.randint(40, 160) / 40 )
                 tupian_data = scrapy.Request(item['tiezi_link'], meta={'item': item}, callback=self.detail_parse)
                 yield tupian_data
         except:
@@ -28,7 +30,7 @@ class Zhmzy_tupian(scrapy.Spider):
             time.sleep(15 + random.randint(10, 100) / 10)
             yield scrapy.Request(recall_url, callback=self.parse)
 
-        try:
+        try:  # 获取下一页链接地址
             next_page = response.xpath("//*[@id='long-page']/ul/li[10]/a/@href").extract()[0]
             url = self.url_init + next_page
             time.sleep(random.randint(20, 100) / 20)
@@ -36,7 +38,7 @@ class Zhmzy_tupian(scrapy.Spider):
         except:
             print('爬取完毕！')
 
-    def detail_parse(self, tupian_data):
+    def detail_parse(self, tupian_data):  # 获取每个帖子的图片的所有链接
         item = tupian_data.meta['item']
         link = []
         try:
