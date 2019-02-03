@@ -25,6 +25,14 @@ DEFAULT_REQUEST_HEADERS = {
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 }
+ITEM_PIPELINES = {
+    'zhmzy.pipelines.ZhmzyPipeline' : 300,
+    # 'Get_tencent_job_scrapy.pipelines.Mysqlpipeline' : 400
+}
+MONGODB_HOST = 'localhost'
+MONGODB_DBNAME = 'zhmzy'
+MONGODB_PORT = 27017
+MONGODB_SHEETNAME = 'zhmzy'
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
