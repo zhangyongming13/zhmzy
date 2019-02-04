@@ -4,14 +4,14 @@ import random
 from zhmzy.items import ZhmzyItem
 
 
-url = ['https://www.273zh.com/html/news/69/']
+url = ['https://www.609zh.com/html/news/69/']
 
 
 class Zhmzy_tupian(scrapy.Spider):
     name = 'zhmzy'
-    allowed_url = ['273zh.com']
-    start_urls = ['https://www.273zh.com/html/news/69/']
-    url_init = 'https://www.273zh.com'
+    allowed_url = ['609zh.com']
+    start_urls = ['https://www.609zh.com/html/news/69/']
+    url_init = 'https://www.609zh.com'
 
     def parse(self,response):
         try:
@@ -21,7 +21,7 @@ class Zhmzy_tupian(scrapy.Spider):
                 item['tiezi_name'] = each.xpath("./span[@class='note text-bg-c']/text()").extract()[0]
                 item['tiezi_link'] = self.url_init + each.xpath("./@href").extract()[0]
                 # 获取每一个链接帖子的具体情况，相当于点进去然后获取每个图片的链接
-                time.sleep(8 + random.randint(40, 160) / 40 )
+                time.sleep(30 + random.randint(40, 160) / 20 )
                 tupian_data = scrapy.Request(item['tiezi_link'], meta={'item': item}, callback=self.detail_parse)
                 yield tupian_data
         except:
