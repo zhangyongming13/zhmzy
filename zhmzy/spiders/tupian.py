@@ -4,14 +4,14 @@ import random
 from zhmzy.items import ZhmzyItem
 
 
-url = ['https://www.609zh.com/html/news/69/']
+url = ['url']
 
 
 class Zhmzy_tupian(scrapy.Spider):
     name = 'zhmzy'
-    allowed_url = ['609zh.com']
-    start_urls = ['https://www.609zh.com/html/news/69/']
-    url_init = 'https://www.609zh.com'
+    allowed_url = ['url']
+    start_urls = ['url']
+    url_init = 'url'
 
     def parse(self,response):
         try:
@@ -21,7 +21,7 @@ class Zhmzy_tupian(scrapy.Spider):
                 item['tiezi_name'] = each.xpath("./span[@class='note text-bg-c']/text()").extract()[0]
                 item['tiezi_link'] = self.url_init + each.xpath("./@href").extract()[0]
                 # 获取每一个链接帖子的具体情况，相当于点进去然后获取每个图片的链接
-                time.sleep(30 + random.randint(40, 160) / 20 )
+                time.sleep(15 + random.randint(40, 160) / 10 )
                 tupian_data = scrapy.Request(item['tiezi_link'], meta={'item': item}, callback=self.detail_parse)
                 yield tupian_data
         except:
@@ -31,9 +31,12 @@ class Zhmzy_tupian(scrapy.Spider):
             yield scrapy.Request(recall_url, callback=self.parse)
 
         try:  # 获取下一页链接地址
-            next_page = response.xpath("//*[@id='long-page']/ul/li[10]/a/@href").extract()[0]
+            try:
+                next_page = response.xpath("//*[@id='long-page']/ul/li[10]/a/@href").extract()[0]
+            except:
+                next_page = response.xpath("//*[@id='long-page']/ul/li[11]/a/@href").extract()[0]
             url = self.url_init + next_page
-            time.sleep(random.randint(20, 100) / 20)
+            time.sleep(15 + random.randint(10, 100) / 10)
             yield scrapy.Request(url, callback=self.parse)
         except:
             print('爬取完毕！')
@@ -47,6 +50,14 @@ class Zhmzy_tupian(scrapy.Spider):
                 src = each.xpath("@src").extract()[0]
                 link.append(src)
             item['tupian_link'] = link
+            # for i in link:
+            #     tupian = scrapy.Request(i, meta={'item': item}, callback=self.Get_tupian_data)
+            #     yield tupian
         except:
             pass
         yield item
+
+    # def Get_tupian_data(src, tupian):  # 获取图片链接对应的数据
+    #     item = tupian.meta['item']
+    #
+    #     yield tupian.content
